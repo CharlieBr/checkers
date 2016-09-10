@@ -33,7 +33,6 @@
                 You are logged in as: <span ng-bind="home.user"></span>
                 <button ng-click="home.logout()" class="btn btn-primary">Logout</button>
             </div>
-
         </div>
     </div>
 </div>
@@ -54,7 +53,7 @@
                 self.authenticated = false;
                 $location.path("/");
             }).error(function () {
-                console.log("Logout failed!")
+                console.log("Logout failed!");
                 self.authenticated = false;
             });
         };

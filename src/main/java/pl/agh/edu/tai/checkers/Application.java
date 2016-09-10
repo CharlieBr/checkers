@@ -27,11 +27,6 @@ import java.security.Principal;
 @EnableOAuth2Sso
 @RestController
 public class Application extends WebSecurityConfigurerAdapter {
-    @RequestMapping("/logout")
-    public String logout(){
-        return "See you soon!";
-    }
-
     @RequestMapping("/user")
     public Principal user(Principal principal) {
         return principal;
