@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Demo</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script type="text/javascript" src="js/grid.js"></script>
+</head>
+
+<body ng-app="app">
+<div class="container" ng-controller="home as home">
+    <div ng-show="!home.authenticated">
+        Login with: <a href="/login">Facebook</a>
+        <br>
+        {{logoutMsg}}
+    </div>
+    <div ng-show="home.authenticated">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1> Welcome in Checkers! </h1>
+                <a href="javascript: openGrid()">Click here</a> to view the Game Grid.<br />
+                <a href="javascript: closeGrid()">Click here</a> to close the Game Grid.<br /><br />
+            </div>
+            <div class="col-sm-4" align="right">
+                You are logged in as: <span ng-bind="home.user"></span>
+                <button ng-click="home.logout()" class="btn btn-primary">Logout</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
+<script type="text/javascript">
+    angular.module("app", []).controller("home", function ($scope, $http, $location) {
+        var self = this;
+        $http.get("/user").success(function (data) {
+            self.user = data.userAuthentication.details.name;
+            self.authenticated = true;
+        }).error(function () {
+            self.user = "N/A";
+            self.authenticated = false;
+        });
+        self.logout = function () {
+            $http.post('/logout', {}).success(function () {
+                self.authenticated = false;
+                $location.path("/");
+            }).error(function () {
+                console.log("Logout failed!")
+                self.authenticated = false;
+            });
+        };
+    });
+</script>
+</body>
+</html>
