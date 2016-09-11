@@ -1,13 +1,14 @@
-package pl.agh.edu.tai.checkers;
+package pl.edu.agh.tai.checkers;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +23,8 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -42,13 +45,19 @@ import java.security.Principal;
 public class Application extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2ClientContext oauth2ClientContext;
+    private static PlayersRepository playersRepository;
 
     @RequestMapping("/user")
-    public Principal user(Principal principal) {
+    public Principal user(final Principal principal) {
+        final Facebook facebook = new FacebookTemplate(this.oauth2ClientContext.getAccessToken().getValue());
+        playersRepository.savePlayer(new Player(facebook.userOperations().getUserProfile().getId(),
+                facebook.userOperations().getUserProfile().getName()));
         return principal;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
+        final ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
+        playersRepository = (PlayersRepository)context.getBean("playersRepository");
         SpringApplication.run(Application.class, args);
     }
 
