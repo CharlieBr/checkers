@@ -3,11 +3,11 @@ package pl.edu.agh.tai.checkers;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Player implements Serializable{
+public class Player implements Serializable {
     private String id;
     private String name;
 
-    public Player(final String id, final String name){
+    public Player(final String id, final String name) {
         this.name = name;
         this.id = id;
     }

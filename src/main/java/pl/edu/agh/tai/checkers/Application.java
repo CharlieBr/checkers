@@ -1,6 +1,5 @@
 package pl.edu.agh.tai.checkers;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +7,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceS
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -56,13 +54,12 @@ public class Application extends WebSecurityConfigurerAdapter {
     }
 
     public static void main(final String[] args) {
-        final ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
-        playersRepository = (PlayersRepository)context.getBean("playersRepository");
+        playersRepository = new PlayersRepository();
         SpringApplication.run(Application.class, args);
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         http.antMatcher("/**").authorizeRequests()
                 .antMatchers("/", "/login**", "/webjars/**")
                 .permitAll().anyRequest().authenticated()
@@ -73,8 +70,8 @@ public class Application extends WebSecurityConfigurerAdapter {
     }
 
     private Filter ssoFilter() {
-        OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
+        final OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
+        final OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), this.oauth2ClientContext);
         facebookFilter.setRestTemplate(facebookTemplate);
         facebookFilter.setTokenServices(new UserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId()));
         return facebookFilter;
@@ -94,15 +91,15 @@ public class Application extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FilterRegistrationBean oauth2ClientFilterRegistration(
-            OAuth2ClientContextFilter filter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
+            final OAuth2ClientContextFilter filter) {
+        final FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(filter);
         registration.setOrder(-100);
         return registration;
     }
 
     private CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        final HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
         repository.setHeaderName("X-XSRF-TOKEN");
         return repository;
     }
@@ -110,13 +107,13 @@ public class Application extends WebSecurityConfigurerAdapter {
     private Filter csrfHeaderFilter() {
         return new OncePerRequestFilter() {
             @Override
-            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, FilterChain filterChain)
                     throws ServletException, IOException {
 
-                CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+                final CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
                 if (csrf != null) {
                     Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
-                    String token = csrf.getToken();
+                    final String token = csrf.getToken();
                     if (cookie == null || token != null && !token.equals(cookie.getValue())) {
                         cookie = new Cookie("XSRF-TOKEN", token);
                         cookie.setPath("/");
