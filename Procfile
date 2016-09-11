@@ -1,0 +1,1 @@
+web: java -jar target/checkers-project-1.0.jar
