@@ -43,18 +43,19 @@ import java.security.Principal;
 public class Application extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2ClientContext oauth2ClientContext;
-    private static PlayersRepository playersRepository;
+    private PlayersRepository playersRepository;
+    private Facebook facebook;
 
     @RequestMapping("/user")
     public Principal user(final Principal principal) {
-        final Facebook facebook = new FacebookTemplate(this.oauth2ClientContext.getAccessToken().getValue());
-        playersRepository.savePlayer(new Player(facebook.userOperations().getUserProfile().getId(),
-                facebook.userOperations().getUserProfile().getName()));
+        this.facebook = new FacebookTemplate(this.oauth2ClientContext.getAccessToken().getValue());
+        final String playerID = this.facebook.userOperations().getUserProfile().getId();
+        final String playerName = this.facebook.userOperations().getUserProfile().getName();
+        this.playersRepository.savePlayer(new Player(playerID, playerName));
         return principal;
     }
 
     public static void main(final String[] args) {
-        playersRepository = new PlayersRepository();
         SpringApplication.run(Application.class, args);
     }
 
@@ -67,6 +68,7 @@ public class Application extends WebSecurityConfigurerAdapter {
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
                 .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+        this.playersRepository = new PlayersRepository();
     }
 
     private Filter ssoFilter() {

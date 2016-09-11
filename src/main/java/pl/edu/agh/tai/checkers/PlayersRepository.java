@@ -1,11 +1,8 @@
 package pl.edu.agh.tai.checkers;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
 public class PlayersRepository {
     private final Map<String, Player> players = new ConcurrentHashMap<>();
 

@@ -10,7 +10,7 @@ body
 
 table.grid
 {
-	background-color: FFCC99;
+	background-color: lightgray;
 	margin-left:auto;
 	margin-right:auto;
 }
@@ -27,12 +27,12 @@ td
 
 td.redcell
 {
-	background-color: red;
+	background-color: gray;
 }
 
 td.blackcell
 {
-	background-color: black;
+	background-color: darkslategray;
 }
 
 #checker-red
@@ -42,7 +42,7 @@ td.blackcell
 	display: block;
 	height: 50px;
 	width: 50px;
-	background-color: red;
+	background-color: black;
 	-moz-border-radius: 25px;
 	-webkit-border-radius: 25px;
 	-khtml-border-radius: 25px;

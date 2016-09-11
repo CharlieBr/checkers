@@ -51,35 +51,6 @@ function loadGrid()
 {
 	printGrid();
 	addEvents();
-	checkerslbl = document.getElementById('checkerslbl');
-	checkerslbl.style.position = "relative";
-	animateCSS(checkerslbl, 200, 100,
-		{
-			left: function(frame,time)
-			{
-				if (frame <= 50)
-				{
-					return frame + "px";
-				}
-				else if (frame > 100 && frame <= 150)
-				{
-					count = (frame-150) * (-1);
-					return count;
-				}
-			},
-			top: function(frame,time)
-			{
-				if (frame > 50 && frame <= 100)
-				{
-					return (frame-50) + "px";
-				}
-				else if (frame > 150 && frame <= 200)
-				{
-					count = (frame-200) * (-1);
-					return count;
-				}
-			}
-		});
 }
 
 function printGrid()
@@ -503,7 +474,7 @@ function openGrid()
 	var height = 800;
 	var x = screen.availWidth/2 - width/2;
 	var y = screen.availHeight/2 - height/2;
-	w = window.open("grid.html", "Checkers", "width=" + width + ", height=" + height + ", status=yes, resizable=yes, left=" + x + ", top=" + y);
+	//w = window.open("grid.html", "Checkers", "width=" + width + ", height=" + height + ", status=yes, resizable=yes, left=" + x + ", top=" + y);
 }
 
 function closeGrid()

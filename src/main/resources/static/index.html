@@ -24,15 +24,13 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1> Welcome in Checkers! </h1>
-                <a href="javascript: openGrid()">Click here</a> to view the Game Grid.<br />
-                <a href="javascript: closeGrid()">Click here</a> to close the Game Grid.<br /><br />
             </div>
             <div class="col-sm-4" align="right">
                 You are logged in as: <span ng-bind="home.user"></span>
                 <button ng-click="home.logout()" class="btn btn-primary">Logout</button>
             </div>
         </div>
-        <button ng-click="home.getData()" class="btn btn-primary">Get Data</button>
+        <a href="grid.html" class="btn btn-primary" role="button">Play</a>
     </div>
 </div>
 
@@ -40,12 +38,12 @@
 <script type="text/javascript">
     angular.module("app", []).controller("home", function ($scope, $http, $location) {
         var self = this;
+        self.authenticated = false;
         $http.get("/user").success(function (data) {
             self.user = data.userAuthentication.details.name;
             self.authenticated = true;
         }).error(function () {
             self.user = "N/A";
-            self.authenticated = false;
         });
         self.logout = function () {
             $http.post('/logout', {}).success(function () {
@@ -53,7 +51,6 @@
                 $location.path("/");
             }).error(function () {
                 console.log("Logout failed!");
-                self.authenticated = false;
             });
         };
     });
