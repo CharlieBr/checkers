@@ -1,1 +1,1 @@
-web: java -jar target/checkers-project-1.0-SNAPSHOT.jar
+web: $JAVA_OPTS -Dserver.port=$PORT -jar target/checkers-project-1.0-SNAPSHOT.jar
