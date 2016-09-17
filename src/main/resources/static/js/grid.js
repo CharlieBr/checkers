@@ -491,11 +491,11 @@ function login(username, password)
 	request.send('userName=' + username + '&password=' + password);
 	if (request.status == 200)
 	{
-		user = eval('(' + request.responseText + ')');
+		userName = eval('(' + request.responseText + ')');
 	}
-	if (user.result == 'valid')
+	if (userName.result == 'valid')
 	{
-		document.cookie = '3550timstamp=' + user.userName + ' ' + user.timestamp + '; max-age=' + (60*60*24*365);
+		document.cookie = '3550timstamp=' + userName.userName + ' ' + userName.timestamp + '; max-age=' + (60*60*24*365);
 		openGrid();
 	}
 	else
