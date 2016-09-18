@@ -190,7 +190,7 @@ var stopX = null;
 var stopY = null;
 
 function sendMove(startX, startY, stopX, stopY) {
-    stompClient.send("/app/move", {}, JSON.stringify({'startX': startX, 'startY':startY, 'stopX':stopX, 'stopY':stopY}));
+    stompClient.send("/grid/move", {}, JSON.stringify({'startX': startX, 'startY':startY, 'stopX':stopX, 'stopY':stopY}));
 }
 
 function showMove(startX, startY, stopX, stopY){
