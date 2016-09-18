@@ -190,8 +190,11 @@ var startY = null;
 var stopX = null;
 var stopY = null;
 
-function sendMove(startX, startY, stopX, stopY, occupied, turn) {
+function sendMove(jump, jumpedX, jumpedY, startX, startY, stopX, stopY, occupied, turn) {
     stompClient.send("/grid/move", {}, JSON.stringify({
+        'jump' : jump,
+        'jumpedX' : jumpedX,
+        'jumpedY' : jumpedY,
         'startX': startX,
         'startY':startY,
         'stopX':stopX,
@@ -200,7 +203,13 @@ function sendMove(startX, startY, stopX, stopY, occupied, turn) {
         'turn': turn}));
 }
 
-function showMove(startX, startY, stopX, stopY, occupied, turnColor){
+function showMove(jump, jumpedX, jumpedY, startX, startY, stopX, stopY, occupied, turnColor){
+    if(jump){
+        var jumpedGridCell = getGridCell(jumpedX, jumpedY);
+        var jumpedPiece = getGridPiece(jumpedX, jumpedY);
+        jumpedGridCell.innerHTML = "<div id=''></div>";
+        jumpedPiece.occupied = "";
+    }
     var startGridCell = getGridCell(startX, startY);
     var stopGridCell = getGridCell(stopX, stopY);
     var startPiece = getGridPiece(startX, startY);
@@ -253,7 +262,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'red');
+                sendMove(false, -1, -1, startX, startY, stopX, stopY, gridPiece.occupied, 'red');
                 startX = null;
                 startY = null;
                 stopX = null;
@@ -273,6 +282,15 @@ function movePiece()
 				gridPiece.king = selected.king;
 				jumped.occupied = "";
 				jumpedCell.innerHTML = "<div id=''></div>";
+                stopX = (stopX == null ? x : stopX);
+                stopY = (stopY == null ? y : stopY);
+                if(startX!=null && startY!=null && stopX != null && stopY != null){
+                    sendMove(true, x+1, y-1, startX, startY, stopX, stopY, gridPiece.occupied, 'red');
+                    startX = null;
+                    startY = null;
+                    stopX = null;
+                    stopY = null;
+                }
 				jumpedCell.onclick = movePiece;
 				selected.occupied = "";
 				selected.king = false;
@@ -295,6 +313,15 @@ function movePiece()
 				gridPiece.king = selected.king;
 				jumped.occupied = "";
 				jumpedCell.innerHTML = "<div id=''></div>";
+                stopX = (stopX == null ? x : stopX);
+                stopY = (stopY == null ? y : stopY);
+                if(startX!=null && startY!=null && stopX != null && stopY != null){
+                    sendMove(true, x-1, y-1, startX, startY, stopX, stopY, gridPiece.occupied, 'red');
+                    startX = null;
+                    startY = null;
+                    stopX = null;
+                    stopY = null;
+                }
 				jumpedCell.onclick = movePiece;
 				selected.occupied = "";
 				selected.king = false;
@@ -316,7 +343,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'white');
+                sendMove(false, -1, -1, startX, startY, stopX, stopY, gridPiece.occupied, 'white');
                 startX = null;
                 startY = null;
                 stopX = null;
@@ -400,7 +427,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX != null && startY != null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'white');
+                sendMove(false, -1, -1, startX, startY, stopX, stopY, gridPiece.occupied, 'white');
                 startX = null;
                 startY = null;
                 stopX = null;
@@ -417,9 +444,18 @@ function movePiece()
 				cell.innerHTML = "<div id=" + selected.occupied + "></div>";
 				cell.onclick = movePiece;
 				gridPiece.occupied = selected.occupied;
-				gridPiece.king = selected.king
+				gridPiece.king = selected.king;
 				jumped.occupied = "";
 				jumpedCell.innerHTML = "<div id=''></div>";
+                stopX = (stopX == null ? x : stopX);
+                stopY = (stopY == null ? y : stopY);
+                if(startX!=null && startY!=null && stopX != null && stopY != null){
+                    sendMove(true, x+1, y+1, startX, startY, stopX, stopY, gridPiece.occupied, 'white');
+                    startX = null;
+                    startY = null;
+                    stopX = null;
+                    stopY = null;
+                }
 				jumpedCell.onclick = movePiece;
 				selected.occupied = "";
 				selected.king = false;
@@ -441,6 +477,15 @@ function movePiece()
 				gridPiece.king = selected.king;
 				jumped.occupied = "";
 				jumpedCell.innerHTML = "<div id=''></div>";
+                stopX = (stopX == null ? x : stopX);
+                stopY = (stopY == null ? y : stopY);
+                if(startX!=null && startY!=null && stopX != null && stopY != null){
+                    sendMove(true, x-1, y+1, startX, startY, stopX, stopY, gridPiece.occupied, 'white');
+                    startX = null;
+                    startY = null;
+                    stopX = null;
+                    stopY = null;
+                }
 				jumpedCell.onclick = movePiece;
 				selected.occupied = "";
 				selected.king = false;
@@ -462,7 +507,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'red');
+                sendMove(false, -1, -1, startX, startY, stopX, stopY, gridPiece.occupied, 'red');
                 startX = null;
                 startY = null;
                 stopX = null;

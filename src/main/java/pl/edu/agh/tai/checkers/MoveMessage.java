@@ -1,6 +1,9 @@
 package pl.edu.agh.tai.checkers;
 
 public class MoveMessage {
+    private boolean jump;
+    private int jumpedX;
+    private int jumpedY;
     private int startX;
     private int startY;
     private int stopX;
@@ -11,12 +14,18 @@ public class MoveMessage {
     public MoveMessage() {
     }
 
-    public MoveMessage(final int startX,
+    public MoveMessage(final boolean jump,
+                       final int jumpedX,
+                       final int jumpedY,
+                       final int startX,
                        final int startY,
                        final int stopX,
                        final int stopY,
                        final String occupied,
                        final String turn) {
+        this.jump = jump;
+        this.jumpedX = jumpedX;
+        this.jumpedY = jumpedY;
         this.startX = startX;
         this.startY = startY;
         this.stopX = stopX;
@@ -71,5 +80,29 @@ public class MoveMessage {
 
     public void setTurn(String turn) {
         this.turn = turn;
+    }
+
+    public boolean isJump() {
+        return this.jump;
+    }
+
+    public void setJump(boolean jump) {
+        this.jump = jump;
+    }
+
+    public int getJumpedX() {
+        return this.jumpedX;
+    }
+
+    public void setJumpedX(int jumpedX) {
+        this.jumpedX = jumpedX;
+    }
+
+    public int getJumpedY() {
+        return this.jumpedY;
+    }
+
+    public void setJumpedY(int jumpedY) {
+        this.jumpedY = jumpedY;
     }
 }
