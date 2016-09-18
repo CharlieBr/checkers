@@ -78,7 +78,7 @@ public class MoveMessage {
         return this.turn;
     }
 
-    public void setTurn(String turn) {
+    public void setTurn(final String turn) {
         this.turn = turn;
     }
 
@@ -86,7 +86,7 @@ public class MoveMessage {
         return this.jump;
     }
 
-    public void setJump(boolean jump) {
+    public void setJump(final boolean jump) {
         this.jump = jump;
     }
 
@@ -94,7 +94,7 @@ public class MoveMessage {
         return this.jumpedX;
     }
 
-    public void setJumpedX(int jumpedX) {
+    public void setJumpedX(final int jumpedX) {
         this.jumpedX = jumpedX;
     }
 
@@ -102,7 +102,7 @@ public class MoveMessage {
         return this.jumpedY;
     }
 
-    public void setJumpedY(int jumpedY) {
+    public void setJumpedY(final int jumpedY) {
         this.jumpedY = jumpedY;
     }
 }

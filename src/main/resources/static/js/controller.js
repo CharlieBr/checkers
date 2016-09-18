@@ -1,6 +1,9 @@
 angular.module("app", []).controller("home", function ($scope, $http, $location) {
     var self = this;
+    self.game = true;
     self.join = false;
+    self.clickedNew = false;
+    self.clickedNew = false;
     $http.get("/user").success(function (data) {
         self.userName = data.userAuthentication.details.name;
         self.userId = data.userAuthentication.details.id;
@@ -24,7 +27,9 @@ angular.module("app", []).controller("home", function ($scope, $http, $location)
         }).error( function () {
             console.log("Error during setting first player");
         });
-        self.game = true;
+        self.game = false;
+        self.join = true;
+        self.clickedNew = true;
     };
     self.joinGame = function () {
         var query = "/new-game/black-player?id=" + self.userId + "&name=" + self.userName;
@@ -33,7 +38,8 @@ angular.module("app", []).controller("home", function ($scope, $http, $location)
         }).error( function () {
             console.log("Error during setting first player");
         });
-        self.joined = true;
+        self.join = false;
+        self.clickedJoin = true;
     }
 }).controller("game", function ($scope, $http, $location) {
     var self = this;
