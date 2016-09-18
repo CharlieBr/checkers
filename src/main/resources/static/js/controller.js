@@ -48,7 +48,6 @@ angular.module("app", []).controller("home", function ($scope, $http, $location)
         var query = "/new-game/player?color=white";
         $http.get(query).success(function (data) {
             self.whitePlayer = data.toString();
-            console.log(self.whitePlayer);
         }).error(function () {
             console.log("Error during getting white player name!");
         });
@@ -58,7 +57,6 @@ angular.module("app", []).controller("home", function ($scope, $http, $location)
         var query = "/new-game/player?color=black";
         $http.get(query).success(function (data) {
             self.blackPlayer = data.toString();
-            console.log(self.blackPlayer);
         }).error(function () {
             console.log("Error during getting black player name!");
         });

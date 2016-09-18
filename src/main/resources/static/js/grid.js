@@ -1,6 +1,50 @@
-var w; //The Game grid window.
+var stompClient = null;
 
+function setConnected(connected) {
+    $("#connect").prop("disabled", connected);
+    $("#disconnect").prop("disabled", !connected);
+    if (connected) {
+        $('#checkersBoard').show();
+    } else {
+        $('#checkersBoard').hide();
+    }
+}
+
+function connect() {
+    var socket = new SockJS('/websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/moves', function (move) {
+            startX = JSON.parse(move.body).startX;
+            startY = JSON.parse(move.body).startY;
+            stopX = JSON.parse(move.body).stopX;
+            stopY = JSON.parse(move.body).stopY;
+            showMove(startX, startY, stopX, stopY);
+        });
+    });
+}
+
+function disconnect() {
+    if (stompClient != null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+}
+
+$(function () {
+    $('#connect').click(function () {
+        connect();
+    });
+    $( "#disconnect" ).click(function() {
+        disconnect(); });
+});
+
+var w; //The Game grid window.
 var user;
+
 
 var grid = [
 	/* Initial White checker positions */
@@ -140,6 +184,23 @@ function addEvents()
 	}
 }
 
+var startX = null;
+var startY = null;
+var stopX = null;
+var stopY = null;
+
+function sendMove(startX, startY, stopX, stopY) {
+    stompClient.send("/app/move", {}, JSON.stringify({'startX': startX, 'startY':startY, 'stopX':stopX, 'stopY':stopY}));
+}
+
+function showMove(startX, startY, stopX, stopY){
+    gridPiece = getGridPiece(startX, startY);
+    var startGridCell = getGridCell(startX, startY);
+    startGridCell.innerHTML = "<div id=''></div>";
+    var stopGridCell = getGridCell(stopX, stopY);
+    stopGridCell.innerHTML = "<div id=" + selected.occupied + "></div>";
+}
+
 function movePiece()
 {
 	cell = this;
@@ -147,7 +208,9 @@ function movePiece()
 	y = cell.parentNode.rowIndex;
 	gridPiece = getGridPiece(x, y);
 	var location = document.getElementById('location');
-	location.innerHTML = 'x: ' + x + ', y: ' + y;
+	// location.innerHTML = 'x: ' + x + ', y: ' + y;
+    startX = (startX == null ? x : startX);
+    startY = (startY == null ? y : startY);
 
 	if (selected.occupied == "" && gridPiece && gridPiece.occupied.indexOf(turn) != -1)
 	{
@@ -156,7 +219,6 @@ function movePiece()
 		selected.x = x;
 		selected.y = y;
 		gridPiece.occupied = "";
-
 		cell.innerHTML = "<div id=''></div>";
 		cell.onclick = movePiece;
 	}
@@ -178,6 +240,16 @@ function movePiece()
 			selected.king = false;
 			selected.x = 0;
 			selected.y = 0;
+            stopX = (stopX == null ? x : stopX);
+            stopY = (stopY == null ? y : stopY);
+            if(startX!=null && startY!=null && stopX != null && stopY != null){
+                sendMove(startX, startY, stopX, stopY);
+                startX = null;
+                startY = null;
+                stopX = null;
+                stopY = null;
+            }
+            console.log("2");
 			turn = 'red';
 		}//Jump left
 		else if ((x == selected.x-2) && (y == selected.y+2) && (getGridPiece(x, y).occupied == ""))
@@ -198,6 +270,7 @@ function movePiece()
 				selected.x = 0;
 				selected.y = 0;
 				turn = 'red';
+
 				gameFinished();
 			}
 		}//Jump right
@@ -307,6 +380,15 @@ function movePiece()
 			selected.king = false;
 			selected.x = 0;
 			selected.y = 0;
+            stopX = (stopX == null ? x : stopX);
+            stopY = (stopY == null ? y : stopY);
+            if(startX!=null && startY!=null && stopX != null && stopY != null){
+                sendMove(startX, startY, stopX, stopY);
+                startX = null;
+                startY = null;
+                stopX = null;
+                stopY = null;
+            }
 			turn = 'white';
 		}//Jump left
 		else if ((x == selected.x-2) && (y == selected.y-2) && (getGridPiece(x, y).occupied == ""))
