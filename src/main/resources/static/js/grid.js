@@ -308,8 +308,16 @@ function movePiece()
 			selected.king = false;
 			selected.x = 0;
 			selected.y = 0;
-
 			cell.innerHTML = "<div id=" + gridPiece.occupied + "></div>";
+            stopX = (stopX == null ? x : stopX);
+            stopY = (stopY == null ? y : stopY);
+            if(startX!=null && startY!=null && stopX != null && stopY != null){
+                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'white');
+                startX = null;
+                startY = null;
+                stopX = null;
+                stopY = null;
+            }
 			cell.onclick = movePiece;
 		}//Move king
 		else if ((x == selected.x-1 || x == selected.x+1) && (y == selected.y-1) && (gridPiece.occupied == "") && selected.king)
@@ -447,6 +455,15 @@ function movePiece()
 			selected.x = 0;
 			selected.y = 0;
 			cell.innerHTML = "<div id=" + gridPiece.occupied + "></div>";
+            stopX = (stopX == null ? x : stopX);
+            stopY = (stopY == null ? y : stopY);
+            if(startX!=null && startY!=null && stopX != null && stopY != null){
+                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'red');
+                startX = null;
+                startY = null;
+                stopX = null;
+                stopY = null;
+            }
 			cell.onclick = movePiece;
 		}//Move king
 		else if ((x == selected.x-1 || x == selected.x+1) && (y == selected.y+1) && (gridPiece.occupied == "") && selected.king)
