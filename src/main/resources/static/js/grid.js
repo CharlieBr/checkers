@@ -11,7 +11,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS("<c:url value='/websocket'/>");
+    var socket = new SockJS('/websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);

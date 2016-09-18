@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MessageController {
     @MessageMapping("/move")
-    @SendTo("topic/moves")
+    @SendTo("/topic/moves")
     public MoveMessage move(final MoveMessage message) throws Exception {
         return message;
     }
