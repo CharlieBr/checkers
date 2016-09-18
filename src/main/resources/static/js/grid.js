@@ -16,13 +16,16 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         stompClient.subscribe('/topic/moves', function (move) {
+            var jump = JSON.parse(move.body).jump;
+            var jumpedX = JSON.parse(move.body).jumpedX;
+            var jumpedY = JSON.parse(move.body).jumpedY;
             var startX = JSON.parse(move.body).startX;
             var startY = JSON.parse(move.body).startY;
             var stopX = JSON.parse(move.body).stopX;
             var stopY = JSON.parse(move.body).stopY;
             var occupied = JSON.parse(move.body).occupied;
             var turnColor = JSON.parse(move.body).turn;
-            showMove(startX, startY, stopX, stopY, occupied, turnColor);
+            showMove(jump, jumpedX, jumpedY, startX, startY, stopX, stopY, occupied, turnColor);
         });
     });
 }
@@ -205,6 +208,7 @@ function sendMove(jump, jumpedX, jumpedY, startX, startY, stopX, stopY, occupied
 
 function showMove(jump, jumpedX, jumpedY, startX, startY, stopX, stopY, occupied, turnColor){
     if(jump){
+        console.log(jump);
         var jumpedGridCell = getGridCell(jumpedX, jumpedY);
         var jumpedPiece = getGridPiece(jumpedX, jumpedY);
         jumpedGridCell.innerHTML = "<div id=''></div>";
@@ -372,7 +376,7 @@ function movePiece()
 				cell.innerHTML = "<div id=" + selected.occupied + "></div>";
 				cell.onclick = movePiece;
 				gridPiece.occupied = selected.occupied;
-				gridPiece.king = selected.king
+				gridPiece.king = selected.king;
 				jumped.occupied = "";
 				jumpedCell.innerHTML = "<div id=''></div>";
 				jumpedCell.onclick = movePiece;
