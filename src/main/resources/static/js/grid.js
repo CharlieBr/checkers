@@ -16,11 +16,12 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         stompClient.subscribe('/topic/moves', function (move) {
-            startX = JSON.parse(move.body).startX;
-            startY = JSON.parse(move.body).startY;
-            stopX = JSON.parse(move.body).stopX;
-            stopY = JSON.parse(move.body).stopY;
-            showMove(startX, startY, stopX, stopY);
+            var startX = JSON.parse(move.body).startX;
+            var startY = JSON.parse(move.body).startY;
+            var stopX = JSON.parse(move.body).stopX;
+            var stopY = JSON.parse(move.body).stopY;
+            var occupied = JSON.parse(move.body).occupied;
+            showMove(startX, startY, stopX, stopY, occupied);
         });
     });
 }
@@ -188,17 +189,21 @@ var startY = null;
 var stopX = null;
 var stopY = null;
 
-function sendMove(startX, startY, stopX, stopY) {
-    stompClient.send("/grid/move", {}, JSON.stringify({'startX': startX, 'startY':startY, 'stopX':stopX, 'stopY':stopY}));
+function sendMove(startX, startY, stopX, stopY, occupied) {
+    stompClient.send("/grid/move", {}, JSON.stringify({
+        'startX': startX,
+        'startY':startY,
+        'stopX':stopX,
+        'stopY':stopY,
+        'occupied' : occupied}));
 }
 
-function showMove(startX, startY, stopX, stopY){
+function showMove(startX, startY, stopX, stopY, occupied){
     var startGridCell = getGridCell(startX, startY);
     startGridCell.innerHTML = "<div id=''></div>";
     var stopGridCell = getGridCell(stopX, stopY);
-    var gridPiece = getGridPiece(stopX, stopY);
-    console.log("Occupied: " + gridPiece.occupied);
-    stopGridCell.innerHTML = "<div id=" + gridPiece.occupied + "></div>";
+    console.log("Occupied: " + occupied);
+    stopGridCell.innerHTML = "<div id=" + occupied + "></div>";
 }
 
 function movePiece()
@@ -242,7 +247,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY);
+                sendMove(startX, startY, stopX, stopY, gridPiece.occupied);
                 startX = null;
                 startY = null;
                 stopX = null;
@@ -381,7 +386,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY);
+                sendMove(startX, startY, stopX, stopY, gridPiece.occupied);
                 startX = null;
                 startY = null;
                 stopX = null;
