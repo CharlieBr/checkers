@@ -1,28 +1,48 @@
 package pl.edu.agh.tai.checkers;
 
 public class MoveMessage {
-    private int x;
-    private int y;
+    private int startX;
+    private int startY;
+    private int stopX;
+    private int stopY;
 
     public MoveMessage(){}
-    public MoveMessage(final int x, final int y){
-        this.x = x;
-        this.y = y;
+    public MoveMessage(final int startX, final int startY, final int stopX, final int stopY){
+        this.startX = startX;
+        this.startY = startY;
+        this.stopX = stopX;
+        this.stopY = stopY;
     }
 
-    public int getX() {
-        return this.x;
+    public int getStartX() {
+        return this.startX;
     }
 
-    public void setX(final int x) {
-        this.x = x;
+    public void setStartX(final int startX) {
+        this.startX = startX;
     }
 
-    public int getY() {
-        return this.y;
+    public int getStartY() {
+        return this.startY;
     }
 
-    public void setY(final int y) {
-        this.y = y;
+    public void setStartY(final int startY) {
+        this.startY = startY;
+    }
+
+    public int getStopX() {
+        return this.stopX;
+    }
+
+    public void setStopX(final int stopX) {
+        this.stopX = stopX;
+    }
+
+    public int getStopY() {
+        return this.stopY;
+    }
+
+    public void setStopY(final int stopY) {
+        this.stopY = stopY;
     }
 }

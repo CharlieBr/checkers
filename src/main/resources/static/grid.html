@@ -1,26 +1,37 @@
 <html lang="en">
 <head>
     <title>Checkers</title>
-    <script type='text/javascript' src='js/grid.js'></script>
     <link rel='stylesheet' type='text/css' href='css/gamegrid.css'/>
     <link rel='stylesheet' type='text/css' href='/webjars/bootstrap/css/bootstrap.min.css'/>
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
     <script type='text/javascript' src='js/controller.js'></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script type='text/javascript' src='js/grid.js'></script>
 </head>
 
 <body onload='loadGrid()' ng-app="app">
 <div ng-controller="game as game">
-    <button class="btn btn-danger" ng-show="!game.start" ng-click='game.setPlayers()'>Start</button>
-    <div ng-show="game.start">
+    <button id='connect' class="btn btn-danger" ng-show="!game.start" ng-click='game.setPlayers()'>Start</button>
+    <div id = 'checkersBoard' ng-show="game.start">
         <div id='whiteplayer'><br/> White Player's name: <span ng-bind="game.whitePlayer"></span><br/></div>
         <div id='gamegrid'></div>
         <div id='location'></div>
         <div ng-show="!game.ready"> Waiting for another player</div>
         <div ng-show="game.ready"> Black Player's name: <span ng-bind="game.blackPlayer"></span></div>
-        <a href="/" class="btn btn-danger" role="button">End game</a>
+        <button id="disconnect" class="btn btn-danger">End game</button>
     </div>
+    <a href="/" class="btn btn-danger" role="button">Return</a>
+    <!--<div ng-show="game.start">-->
+        <!--<div id='whiteplayer'><br/> White Player's name: <span ng-bind="game.whitePlayer"></span><br/></div>-->
+        <!--<div id='gamegrid'></div>-->
+        <!--<div id='location'></div>-->
+        <!--<div ng-show="!game.ready"> Waiting for another player</div>-->
+        <!--<div ng-show="game.ready"> Black Player's name: <span ng-bind="game.blackPlayer"></span></div>-->
+        <!--<a href="/" class="btn btn-danger" role="button">End game</a>-->
+    <!--</div>-->
 </div>
 </body>
 </html>
