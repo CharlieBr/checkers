@@ -1,19 +1,28 @@
 package pl.edu.agh.tai.checkers;
 
 public class MoveMessage {
-    private String occupied;
     private int startX;
     private int startY;
     private int stopX;
     private int stopY;
+    private String occupied;
+    private String turn;
 
-    public MoveMessage(){}
-    public MoveMessage(final int startX, final int startY, final int stopX, final int stopY, final String occupied){
+    public MoveMessage() {
+    }
+
+    public MoveMessage(final int startX,
+                       final int startY,
+                       final int stopX,
+                       final int stopY,
+                       final String occupied,
+                       final String turn) {
         this.startX = startX;
         this.startY = startY;
         this.stopX = stopX;
         this.stopY = stopY;
         this.occupied = occupied;
+        this.turn = turn;
     }
 
     public int getStartX() {
@@ -54,5 +63,13 @@ public class MoveMessage {
 
     public void setOccupied(final String occupied) {
         this.occupied = occupied;
+    }
+
+    public String getTurn() {
+        return this.turn;
+    }
+
+    public void setTurn(String turn) {
+        this.turn = turn;
     }
 }

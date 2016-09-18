@@ -21,7 +21,8 @@ function connect() {
             var stopX = JSON.parse(move.body).stopX;
             var stopY = JSON.parse(move.body).stopY;
             var occupied = JSON.parse(move.body).occupied;
-            showMove(startX, startY, stopX, stopY, occupied);
+            var turnColor = JSON.parse(move.body).turn;
+            showMove(startX, startY, stopX, stopY, occupied, turnColor);
         });
     });
 }
@@ -189,21 +190,22 @@ var startY = null;
 var stopX = null;
 var stopY = null;
 
-function sendMove(startX, startY, stopX, stopY, occupied) {
+function sendMove(startX, startY, stopX, stopY, occupied, turn) {
     stompClient.send("/grid/move", {}, JSON.stringify({
         'startX': startX,
         'startY':startY,
         'stopX':stopX,
         'stopY':stopY,
-        'occupied' : occupied}));
+        'occupied' : occupied,
+        'turn': turn}));
 }
 
-function showMove(startX, startY, stopX, stopY, occupied){
+function showMove(startX, startY, stopX, stopY, occupied, turnColor){
     var startGridCell = getGridCell(startX, startY);
     startGridCell.innerHTML = "<div id=''></div>";
     var stopGridCell = getGridCell(stopX, stopY);
-    console.log("Occupied: " + occupied);
     stopGridCell.innerHTML = "<div id=" + occupied + "></div>";
+    turn = turnColor;
 }
 
 function movePiece()
@@ -247,7 +249,7 @@ function movePiece()
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
             if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY, gridPiece.occupied);
+                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'red');
                 startX = null;
                 startY = null;
                 stopX = null;
@@ -385,8 +387,8 @@ function movePiece()
 			selected.y = 0;
             stopX = (stopX == null ? x : stopX);
             stopY = (stopY == null ? y : stopY);
-            if(startX!=null && startY!=null && stopX != null && stopY != null){
-                sendMove(startX, startY, stopX, stopY, gridPiece.occupied);
+            if(startX != null && startY != null && stopX != null && stopY != null){
+                sendMove(startX, startY, stopX, stopY, gridPiece.occupied, 'white');
                 startX = null;
                 startY = null;
                 stopX = null;
@@ -444,7 +446,6 @@ function movePiece()
 			selected.king = false;
 			selected.x = 0;
 			selected.y = 0;
-
 			cell.innerHTML = "<div id=" + gridPiece.occupied + "></div>";
 			cell.onclick = movePiece;
 		}//Move king
