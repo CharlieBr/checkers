@@ -202,17 +202,17 @@ function sendMove(startX, startY, stopX, stopY, occupied, turn) {
 
 function showMove(startX, startY, stopX, stopY, occupied, turnColor){
     var startGridCell = getGridCell(startX, startY);
-    startGridCell.innerHTML = "<div id=''></div>";
-    var startPiece = getGridPiece(startX, startY);
-    startPiece.occupied = "";
     var stopGridCell = getGridCell(stopX, stopY);
+    var startPiece = getGridPiece(startX, startY);
+    var stopPiece = getGridPiece(stopX, stopY);
+    startGridCell.innerHTML = "<div id=''></div>";
     stopGridCell.innerHTML = "<div id=" + occupied + "></div>";
-    var stopPiece = getGridPiece(startX, startY);
+    startPiece.occupied = "";
     stopPiece.occupied = occupied;
-    turn = turnColor;
     selected.occupied = occupied;
     selected.x = 0;
     selected.y = 0;
+    turn = turnColor;
 }
 
 function movePiece()
