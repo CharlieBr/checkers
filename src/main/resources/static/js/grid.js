@@ -194,11 +194,12 @@ function sendMove(startX, startY, stopX, stopY) {
 }
 
 function showMove(startX, startY, stopX, stopY){
-    gridPiece = getGridPiece(startX, startY);
+    var gridPiece = getGridPiece(startX, startY);
     var startGridCell = getGridCell(startX, startY);
     startGridCell.innerHTML = "<div id=''></div>";
     var stopGridCell = getGridCell(stopX, stopY);
-    stopGridCell.innerHTML = "<div id=" + selected.occupied + "></div>";
+    stopGridCell.innerHTML = "<div id=" + gridPiece.occupied + "></div>";
+    turn = (turn == 'red' ? "white" : "red");
 }
 
 function movePiece()
