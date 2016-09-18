@@ -15,7 +15,6 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/moves', function (move) {
             startX = JSON.parse(move.body).startX;
             startY = JSON.parse(move.body).startY;
@@ -194,12 +193,12 @@ function sendMove(startX, startY, stopX, stopY) {
 }
 
 function showMove(startX, startY, stopX, stopY){
-    var gridPiece = getGridPiece(startX, startY);
     var startGridCell = getGridCell(startX, startY);
     startGridCell.innerHTML = "<div id=''></div>";
     var stopGridCell = getGridCell(stopX, stopY);
+    var gridPiece = getGridPiece(stopX, stopY);
+    console.log("Occupied: " + gridPiece.occupied);
     stopGridCell.innerHTML = "<div id=" + gridPiece.occupied + "></div>";
-    turn = (turn == 'red' ? "white" : "red");
 }
 
 function movePiece()
@@ -209,7 +208,6 @@ function movePiece()
 	y = cell.parentNode.rowIndex;
 	gridPiece = getGridPiece(x, y);
 	var location = document.getElementById('location');
-	// location.innerHTML = 'x: ' + x + ', y: ' + y;
     startX = (startX == null ? x : startX);
     startY = (startY == null ? y : startY);
 
@@ -250,7 +248,6 @@ function movePiece()
                 stopX = null;
                 stopY = null;
             }
-            console.log("2");
 			turn = 'red';
 		}//Jump left
 		else if ((x == selected.x-2) && (y == selected.y+2) && (getGridPiece(x, y).occupied == ""))
