@@ -30,14 +30,10 @@
                 <button ng-click="home.logout()" class="btn btn-primary">Logout</button>
             </div>
         </div>
-        <div ng-show="home.game">
-            <button class="btn btn-primary" ng-hide = "home.clickedNew" ng-click="home.newGame()">New game</button>
-        </div>
-        <div ng-show="!home.game && home.join">
-            <a href="grid.html" class="btn btn-danger" role="button" ng-show="home.clickedNew">Go</a><br/>
-            <button class="btn btn-primary" ng-hide="home.clickedNew && !home.clickedJoin" ng-click="home.joinGame()">Join game</button>
-            <a href="grid.html" class="btn btn-danger" role="button" ng-show="home.clickedJoin">Go</a><br/>
-        </div>
+        <button class="btn btn-primary" ng-show="home.game" ng-click="home.newGame()">New game</button>
+        <a href="grid.html" class="btn btn-danger" role="button" ng-show="home.clickedNew">Go to new game</a><br/>
+        <button class="btn btn-primary" ng-show="home.game" ng-click="home.joinGame()">Join game</button>
+        <a href="grid.html" class="btn btn-danger" role="button" ng-show="home.clickedJoin">Go</a><br/>
     </div>
 </div>
 </body>

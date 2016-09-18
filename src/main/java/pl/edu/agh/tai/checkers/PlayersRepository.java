@@ -4,25 +4,25 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayersRepository {
-    private final Map<String, Player> players = new ConcurrentHashMap<>();
+    private static final Map<String, Player> players = new ConcurrentHashMap<>();
 
     public void savePlayer(final Player player) {
-        if (this.players.containsKey(player.getId())) {
-            this.players.put(player.getId(), player);
+        if (players.containsKey(player.getId())) {
+            players.put(player.getId(), player);
         }
     }
 
-    public Player fetchPlayerById(final String id) {
-        return this.players.get(id);
+    public static Player fetchPlayerById(final String id) {
+        return players.get(id);
     }
 
     public Map<String, Player> getPlayers() {
-        return this.players;
+        return players;
     }
 
     public void deletePlayer(final String id) {
-        if (this.players.containsKey(id)) {
-            this.players.remove(id);
+        if (players.containsKey(id)) {
+            players.remove(id);
         }
     }
 }
