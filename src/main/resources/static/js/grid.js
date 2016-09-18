@@ -209,9 +209,6 @@ function showMove(startX, startY, stopX, stopY, occupied, turnColor){
     stopGridCell.innerHTML = "<div id=" + occupied + "></div>";
     startPiece.occupied = "";
     stopPiece.occupied = occupied;
-    selected.occupied = occupied;
-    selected.x = 0;
-    selected.y = 0;
     turn = turnColor;
 }
 
